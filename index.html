@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark-studio">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="description" content="Velvet Stage — Internal choreography and event management app for the Velvet Stage team." />
+  <meta name="theme-color" content="#12121e" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Velvet Stage" />
+  <title>Velvet Stage — Choreography &amp; Event Management</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" type="image/jpeg" href="icons/logo.jpg" />
+  <link rel="apple-touch-icon" href="icons/logo.jpg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<!-- ========== LOGIN SCREEN ========== -->
+<div id="login-screen" class="login-screen active">
+  <div class="login-bg-art" aria-hidden="true">
+    <div class="curtain-left"></div>
+    <div class="curtain-right"></div>
+    <div class="spotlight"></div>
+  </div>
+  <div class="login-card">
+    <div class="login-logo">
+      <img src="icons/logo.jpg" alt="Velvet Stage Logo" width="72" height="72" />
+      <h1 class="login-brand">Velvet Stage</h1>
+      <p class="login-tagline">Choreography &amp; Event Management</p>
+    </div>
+    <form id="login-form" class="login-form" autocomplete="on">
+      <div class="form-group">
+        <label for="login-username">Username</label>
+        <input id="login-username" type="text" name="username" autocomplete="username" placeholder="Enter your username" required />
+      </div>
+      <div class="form-group">
+        <label for="login-password">Password</label>
+        <div class="password-wrap">
+          <input id="login-password" type="password" name="password" autocomplete="current-password" placeholder="Enter your password" required />
+          <button type="button" id="toggle-pw" class="toggle-pw-btn" aria-label="Show or hide password">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
+      </div>
+      <div id="login-error" class="login-error" role="alert" aria-live="polite"></div>
+      <button type="submit" class="btn-primary btn-full" id="login-btn">
+        <span>Sign In</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
+    </form>
+    <p class="login-note">Demo: <strong>admin / demo123</strong> — Not connected to a live backend</p>
+  </div>
+</div>
+
+<!-- ========== MAIN APP SHELL ========== -->
+<div id="app-shell" class="app-shell" hidden>
+
+  <!-- Sidebar -->
+  <aside id="sidebar" class="sidebar" role="navigation" aria-label="Main navigation">
+    <div class="sidebar-header">
+      <img src="icons/logo.jpg" alt="VS" class="sidebar-logo" />
+      <div class="sidebar-brand">
+        <span class="sidebar-brand-name">Velvet Stage</span>
+        <span class="sidebar-brand-sub">Event &amp; Choreo</span>
+      </div>
+      <button id="sidebar-close" class="sidebar-close" aria-label="Close sidebar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+
+    <nav class="sidebar-nav">
+      <ul role="list">
+        <li><a href="#" class="nav-item active" data-page="dashboard" id="nav-dashboard">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+          <span>Dashboard</span>
+        </a></li>
+        <li><a href="#" class="nav-item" data-page="clients" id="nav-clients">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+          <span>Clients</span>
+        </a></li>
+        <li><a href="#" class="nav-item" data-page="events" id="nav-events">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          <span>Events</span>
+        </a></li>
+        <li><a href="#" class="nav-item" data-page="songs" id="nav-songs">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+          <span>Song Library</span>
+          <span class="nav-badge">300</span>
+        </a></li>
+        <li><a href="#" class="nav-item" data-page="performers" id="nav-performers">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          <span>Performers</span>
+        </a></li>
+        <li><a href="#" class="nav-item" data-page="rehearsals" id="nav-rehearsals">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <span>Rehearsals</span>
+        </a></li>
+        <li><a href="#" class="nav-item" data-page="gallery" id="nav-gallery">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          <span>Gallery</span>
+        </a></li>
+        <li><a href="#" class="nav-item" data-page="audio" id="nav-audio">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 010 14.14M15.54 8.46a5 5 0 010 7.07"/></svg>
+          <span>Audio Library</span>
+        </a></li>
+        <li><a href="#" class="nav-item" data-page="whatsapp" id="nav-whatsapp">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+          <span>WhatsApp</span>
+        </a></li>
+        <li><a href="#" class="nav-item" data-page="print" id="nav-print">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+          <span>Print Sheets</span>
+        </a></li>
+        <li><a href="#" class="nav-item" data-page="payments" id="nav-payments">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+          <span>Payments</span>
+        </a></li>
+        <li><a href="#" class="nav-item" data-page="team" id="nav-team">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+          <span>Team / Users</span>
+        </a></li>
+        <li><a href="#" class="nav-item" data-page="settings" id="nav-settings">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 010 14.14M15.54 8.46a5 5 0 010 7.07"/></svg>
+          <span>Settings</span>
+        </a></li>
+      </ul>
+    </nav>
+
+    <!-- Instagram Section in Sidebar -->
+    <div class="sidebar-instagram" id="sidebar-instagram">
+      <div class="instagram-header">
+        <svg class="insta-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>
+        <span>Instagram</span>
+        <a href="https://www.instagram.com/_burritu_/" target="_blank" rel="noopener noreferrer" class="insta-open-link" aria-label="Open Instagram profile">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        </a>
+      </div>
+      <a href="https://www.instagram.com/_burritu_/" target="_blank" rel="noopener noreferrer" class="instagram-profile-card" id="instagram-profile-card" aria-label="View Ritu H. Instagram profile">
+        <div class="insta-avatar-wrap">
+          <div class="insta-avatar-ring"></div>
+          <img src="icons/burritu_avatar.jpg" alt="Ritu H." class="insta-avatar-img" />
+        </div>
+        <div class="insta-profile-info">
+          <span class="insta-handle">@_burritu_</span>
+          <span class="insta-name">Ritu H.</span>
+          <span class="insta-bio">Choreographer · 221K</span>
+        </div>
+      </a>
+      <div class="insta-latest-grid" id="insta-latest-grid" aria-label="Latest posts from @_burritu_">
+        <a href="https://www.instagram.com/_burritu_/" target="_blank" rel="noopener noreferrer" class="insta-grid-item" title="Surat Dance Workshop">
+          <img src="icons/insta_post1.jpg" alt="Dance Workshop Surat" />
+        </a>
+        <a href="https://www.instagram.com/_burritu_/" target="_blank" rel="noopener noreferrer" class="insta-grid-item" title="Hyderabad Workshop">
+          <img src="icons/insta_post2.jpg" alt="Hyderabad Workshop" />
+        </a>
+        <a href="https://www.instagram.com/_burritu_/" target="_blank" rel="noopener noreferrer" class="insta-grid-item" title="Tangerine Dance Routine">
+          <img src="icons/insta_post3.jpg" alt="Tangerine Dance Routine" />
+        </a>
+      </div>
+      <a href="https://www.instagram.com/_burritu_/" target="_blank" rel="noopener noreferrer" class="btn-insta-follow">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>
+        Follow @_burritu_
+      </a>
+    </div>
+
+    <div class="sidebar-footer">
+      <div class="sidebar-user-info">
+        <div class="user-avatar" id="user-avatar-sidebar" aria-hidden="true">A</div>
+        <div class="user-details">
+          <span class="user-name" id="sidebar-user-name">Admin</span>
+          <span class="user-role" id="sidebar-user-role">Administrator</span>
+        </div>
+        <button class="logout-btn" id="sidebar-logout" title="Logout" aria-label="Logout">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <div id="sidebar-overlay" class="sidebar-overlay" aria-hidden="true"></div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <header class="app-header">
+      <button id="sidebar-toggle" class="sidebar-toggle-btn" aria-label="Open navigation menu">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+      <div class="header-search-wrap">
+        <svg class="search-icon-header" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+        <input id="global-search" type="search" class="global-search-input" placeholder="Search clients, songs, performers…" autocomplete="off" aria-label="Global search" />
+      </div>
+      <div class="header-actions">
+        <button id="theme-toggle-btn" class="icon-btn" title="Switch Theme" aria-label="Switch app theme">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        </button>
+        <div class="sync-status" id="sync-status" title="Sync status">
+          <span class="sync-dot synced" id="sync-dot"></span>
+          <span class="sync-label" id="sync-label">Demo Mode</span>
+        </div>
+        <button class="user-menu-btn" id="user-menu-btn" aria-label="User menu">
+          <div class="user-avatar-sm" id="user-avatar-header">A</div>
+        </button>
+      </div>
+    </header>
+
+    <!-- Theme Switcher Panel -->
+    <div id="theme-panel" class="theme-panel" hidden>
+      <div class="theme-panel-header">
+        <h2>Choose Theme</h2>
+        <button id="theme-panel-close" class="icon-btn-sm" aria-label="Close theme panel">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <div class="theme-grid" role="radiogroup" aria-label="App theme selection">
+        <button class="theme-tile active" data-theme="dark-studio" role="radio" aria-checked="true" id="theme-dark-studio">
+          <div class="theme-preview dark-studio-preview">
+            <div class="tp-sidebar"></div>
+            <div class="tp-content"><div class="tp-card"></div><div class="tp-card short"></div></div>
+          </div>
+          <div class="theme-tile-info"><span class="theme-name">Dark Studio</span><span class="theme-desc">Charcoal · Lavender · Teal</span></div>
+          <div class="theme-check" aria-hidden="true">✓</div>
+        </button>
+        <button class="theme-tile" data-theme="light-studio" role="radio" aria-checked="false" id="theme-light-studio">
+          <div class="theme-preview light-studio-preview">
+            <div class="tp-sidebar"></div>
+            <div class="tp-content"><div class="tp-card"></div><div class="tp-card short"></div></div>
+          </div>
+          <div class="theme-tile-info"><span class="theme-name">Light Studio</span><span class="theme-desc">White · Indigo · Clean</span></div>
+          <div class="theme-check" aria-hidden="true">✓</div>
+        </button>
+        <button class="theme-tile" data-theme="black-gold" role="radio" aria-checked="false" id="theme-black-gold">
+          <div class="theme-preview black-gold-preview">
+            <div class="tp-sidebar"></div>
+            <div class="tp-content"><div class="tp-card"></div><div class="tp-card short"></div></div>
+          </div>
+          <div class="theme-tile-info"><span class="theme-name">Black &amp; Gold</span><span class="theme-desc">Obsidian · Champagne Gold</span></div>
+          <div class="theme-check" aria-hidden="true">✓</div>
+        </button>
+        <button class="theme-tile" data-theme="wedding" role="radio" aria-checked="false" id="theme-wedding">
+          <div class="theme-preview wedding-preview">
+            <div class="tp-sidebar"></div>
+            <div class="tp-content"><div class="tp-card"></div><div class="tp-card short"></div></div>
+          </div>
+          <div class="theme-tile-info"><span class="theme-name">Wedding Celebration</span><span class="theme-desc">Ivory · Blush · Rose Gold</span></div>
+          <div class="theme-check" aria-hidden="true">✓</div>
+        </button>
+      </div>
+    </div>
+
+    <!-- PAGE: Dashboard -->
+    <main id="page-dashboard" class="page active" data-page="dashboard">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Dashboard</h1>
+          <p class="page-subtitle" id="dashboard-greeting">Good evening — let's get the stage ready.</p>
+        </div>
+        <div class="page-header-actions">
+          <button class="btn-primary" id="btn-new-event">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            New Event
+          </button>
+        </div>
+      </div>
+      <div class="stats-strip" role="region" aria-label="Quick stats">
+        <div class="stat-card" tabindex="0">
+          <div class="stat-card-icon events-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+          <div class="stat-card-body"><span class="stat-val" id="stat-events">0</span><span class="stat-lbl">Active Events</span></div>
+        </div>
+        <div class="stat-card" tabindex="0">
+          <div class="stat-card-icon songs-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></div>
+          <div class="stat-card-body"><span class="stat-val" id="stat-songs">300</span><span class="stat-lbl">Songs in Library</span></div>
+        </div>
+        <div class="stat-card" tabindex="0">
+          <div class="stat-card-icon performers-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+          <div class="stat-card-body"><span class="stat-val" id="stat-performers">0</span><span class="stat-lbl">Performers</span></div>
+        </div>
+        <div class="stat-card" tabindex="0">
+          <div class="stat-card-icon pending-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+          <div class="stat-card-body"><span class="stat-val attention" id="stat-attention">3</span><span class="stat-lbl">Need Attention</span></div>
+        </div>
+      </div>
+      <div class="dashboard-grid">
+        <section class="dash-card wide" aria-labelledby="upcoming-events-heading">
+          <div class="dash-card-header">
+            <h2 id="upcoming-events-heading" class="dash-card-title"><svg class="dash-card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Upcoming Events</h2>
+            <a href="#" class="dash-card-link" data-page="events">View All</a>
+          </div>
+          <div id="upcoming-events-list" class="event-list">
+            <div class="empty-state">
+              <div class="empty-icon">🎭</div>
+              <p class="empty-title">No events yet</p>
+              <p class="empty-sub">Create your first event to get started</p>
+              <button class="btn-secondary btn-sm" id="btn-create-first-event">Add Event</button>
+            </div>
+          </div>
+        </section>
+        <section class="dash-card" aria-labelledby="needs-attention-heading">
+          <div class="dash-card-header">
+            <h2 id="needs-attention-heading" class="dash-card-title"><svg class="dash-card-icon attention" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>Needs Attention</h2>
+          </div>
+          <ul class="attention-list" id="attention-list">
+            <li class="attention-item info">
+              <span class="attention-dot"></span>
+              <div><strong>300 songs pending approval</strong><p>Review and approve the candidate song library</p></div>
+              <a href="#" class="attention-action" data-page="songs">Review</a>
+            </li>
+            <li class="attention-item warning">
+              <span class="attention-dot"></span>
+              <div><strong>Google Sheets not connected</strong><p>Configure API to enable sync and data persistence</p></div>
+              <a href="#" class="attention-action" data-page="settings">Setup</a>
+            </li>
+            <li class="attention-item info">
+              <span class="attention-dot"></span>
+              <div><strong>No performers added yet</strong><p>Add performers to start building event lineups</p></div>
+              <a href="#" class="attention-action" data-page="performers">Add</a>
+            </li>
+          </ul>
+        </section>
+        <section class="dash-card" aria-labelledby="choreo-progress-heading">
+          <div class="dash-card-header">
+            <h2 id="choreo-progress-heading" class="dash-card-title"><svg class="dash-card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Choreography Progress</h2>
+          </div>
+          <div class="choreo-summary">
+            <div class="choreo-bar-wrap">
+              <div class="choreo-bar-label"><span>Not Started</span><span id="choreo-ns-pct">100%</span></div>
+              <div class="choreo-bar"><div class="choreo-bar-fill not-started" id="choreo-bar-ns" style="width:100%"></div></div>
+            </div>
+            <div class="choreo-bar-wrap">
+              <div class="choreo-bar-label"><span>In Progress</span><span id="choreo-ip-pct">0%</span></div>
+              <div class="choreo-bar"><div class="choreo-bar-fill in-progress" id="choreo-bar-ip" style="width:0%"></div></div>
+            </div>
+            <div class="choreo-bar-wrap">
+              <div class="choreo-bar-label"><span>Completed</span><span id="choreo-done-pct">0%</span></div>
+              <div class="choreo-bar"><div class="choreo-bar-fill completed" id="choreo-bar-done" style="width:0%"></div></div>
+            </div>
+          </div>
+          <p class="choreo-note">Across all 300 candidate songs. Assign to events to track per-event progress.</p>
+        </section>
+        <section class="dash-card wide" aria-labelledby="song-snapshot-heading">
+          <div class="dash-card-header">
+            <h2 id="song-snapshot-heading" class="dash-card-title"><svg class="dash-card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>Song Library Snapshot</h2>
+            <a href="#" class="dash-card-link" data-page="songs">Browse All 300</a>
+          </div>
+          <div class="song-snapshot-filters">
+            <button class="filter-chip active" data-occasion="all">All</button>
+            <button class="filter-chip" data-occasion="Wedding / Sangeet">Sangeet</button>
+            <button class="filter-chip" data-occasion="Mehndi">Mehndi</button>
+            <button class="filter-chip" data-occasion="Haldi">Haldi</button>
+            <button class="filter-chip" data-occasion="Reception">Reception</button>
+            <button class="filter-chip" data-occasion="Bride's Entry">Bride Entry</button>
+          </div>
+          <div id="song-snapshot-list" class="song-snapshot-list"></div>
+        </section>
+        <section class="dash-card" aria-labelledby="recent-activity-heading">
+          <div class="dash-card-header">
+            <h2 id="recent-activity-heading" class="dash-card-title"><svg class="dash-card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Recent Activity</h2>
+          </div>
+          <ul class="activity-list" id="activity-list">
+            <li class="activity-item">
+              <span class="activity-icon">🎵</span>
+              <div class="activity-body"><p>Song library imported — <strong>300 candidate songs</strong></p><time class="activity-time">Just now</time></div>
+            </li>
+            <li class="activity-item">
+              <span class="activity-icon">🔐</span>
+              <div class="activity-body"><p>Signed in to demo mode — <strong>Admin</strong></p><time class="activity-time" id="last-login-time">—</time></div>
+            </li>
+          </ul>
+        </section>
+      </div>
+    </main>
+
+    <!-- PAGE: Songs -->
+    <main id="page-songs" class="page" data-page="songs" hidden>
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Song Library</h1>
+          <p class="page-subtitle">300 candidate Bollywood songs — all pending review. YouTube links blank by design.</p>
+        </div>
+        <div class="page-header-actions">
+          <button class="btn-secondary" id="btn-export-songs">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Export CSV
+          </button>
+        </div>
+      </div>
+      <div class="song-filters" role="search" aria-label="Filter songs">
+        <div class="search-wrap">
+          <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+          <input id="song-search" type="search" placeholder="Search songs, artists, films…" class="filter-input" aria-label="Search songs" />
+        </div>
+        <select id="song-filter-occasion" class="filter-select" aria-label="Filter by occasion">
+          <option value="">All Occasions</option>
+          <option>Wedding / Sangeet</option><option>Haldi</option><option>Mehndi</option>
+          <option>Bride's Entry</option><option>Groom's Entry</option><option>Reception</option>
+          <option>Baby Shower / Godh Bharai</option><option>Birthday</option><option>Anniversary</option>
+          <option>Family Function</option><option>Festival / Navratri</option><option>Corporate Event</option><option>Other</option>
+        </select>
+        <select id="song-filter-difficulty" class="filter-select" aria-label="Filter by difficulty">
+          <option value="">All Difficulties</option>
+          <option>Easy</option><option>Medium</option><option>Difficult</option>
+        </select>
+        <select id="song-filter-status" class="filter-select" aria-label="Filter by approval status">
+          <option value="">All Statuses</option>
+          <option>Pending</option><option>Approved</option><option>Rejected</option>
+        </select>
+        <select id="song-filter-choreo" class="filter-select" aria-label="Filter by choreography status">
+          <option value="">All Choreo</option>
+          <option>Not Started</option><option>In Progress</option><option>Completed</option>
+        </select>
+        <span class="song-count-label" id="song-count-label">300 songs</span>
+      </div>
+      <div class="table-wrap" role="region" aria-label="Song list" tabindex="0">
+        <table class="data-table" id="song-table" aria-label="Song Library">
+          <thead>
+            <tr>
+              <th scope="col" class="sortable" data-col="id">ID</th>
+              <th scope="col" class="sortable" data-col="title">Song Title</th>
+              <th scope="col" class="sortable" data-col="source">Film / Album</th>
+              <th scope="col" class="sortable" data-col="primaryOccasion">Occasion</th>
+              <th scope="col">Difficulty</th>
+              <th scope="col">Approval</th>
+              <th scope="col">Choreo</th>
+              <th scope="col">YouTube</th>
+              <th scope="col">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="song-table-body"></tbody>
+        </table>
+      </div>
+      <div class="pagination" id="song-pagination" aria-label="Song list pagination"></div>
+    </main>
+
+    <!-- Placeholder pages -->
+    <main id="page-clients" class="page" data-page="clients" hidden>
+      <div class="page-header"><div><h1 class="page-title">Clients</h1><p class="page-subtitle">Manage client families and event workspaces.</p></div><div class="page-header-actions"><button class="btn-primary">+ Add Client</button></div></div>
+      <div class="coming-soon-card"><div class="cs-icon">👥</div><h2>Clients Module</h2><p>Client workspace with event linking, performer tracking, and WhatsApp communication. Milestone 2.</p><p class="cs-milestone">Milestone 2 — Core Data</p></div>
+    </main>
+    <main id="page-events" class="page" data-page="events" hidden>
+      <div class="page-header"><div><h1 class="page-title">Events &amp; Schedule</h1><p class="page-subtitle">Plan, sequence and run events.</p></div><div class="page-header-actions"><button class="btn-primary">+ New Event</button></div></div>
+      <div class="coming-soon-card"><div class="cs-icon">🗓️</div><h2>Events &amp; Performance Schedule</h2><p>Drag-and-drop performance ordering, conflict detection, and live event-day tracking. Milestone 2.</p><p class="cs-milestone">Milestone 2 — Core Data</p></div>
+    </main>
+    <main id="page-performers" class="page" data-page="performers" hidden>
+      <div class="page-header"><div><h1 class="page-title">Performers</h1><p class="page-subtitle">Master directory of performers and family sides.</p></div><div class="page-header-actions"><button class="btn-primary">+ Add Performer</button></div></div>
+      <div class="coming-soon-card"><div class="cs-icon">💃</div><h2>Performer Directory</h2><p>Full performer master list with bride/groom side, mobile numbers, and family submission forms. Milestone 2.</p><p class="cs-milestone">Milestone 2 — Core Data</p></div>
+    </main>
+    <main id="page-rehearsals" class="page" data-page="rehearsals" hidden>
+      <div class="page-header"><div><h1 class="page-title">Rehearsals</h1><p class="page-subtitle">Schedule rehearsals and mark attendance.</p></div></div>
+      <div class="coming-soon-card"><div class="cs-icon">⏰</div><h2>Rehearsals &amp; Attendance</h2><p>Scheduling, attendance tracking, and WhatsApp reminders. Milestone 3.</p><p class="cs-milestone">Milestone 3 — Team Operations</p></div>
+    </main>
+    <main id="page-gallery" class="page" data-page="gallery" hidden>
+      <div class="page-header"><div><h1 class="page-title">Gallery</h1><p class="page-subtitle">Showcase approved past performances.</p></div></div>
+      <div class="coming-soon-card"><div class="cs-icon">🖼️</div><h2>Performance Gallery</h2><p>Visual showcase with Internal Only / Client-Shareable visibility. Milestone 6.</p><p class="cs-milestone">Milestone 6 — Gallery &amp; Polish</p></div>
+    </main>
+    <main id="page-audio" class="page" data-page="audio" hidden>
+      <div class="page-header"><div><h1 class="page-title">Audio Library</h1><p class="page-subtitle">Track audio versions linked to Google Drive.</p></div></div>
+      <div class="coming-soon-card"><div class="cs-icon">🎧</div><h2>Audio &amp; Drive Integration</h2><p>Audio versioning with FINAL PERFORMANCE TRACK designation. Milestone 5.</p><p class="cs-milestone">Milestone 5 — Audio &amp; Business</p></div>
+    </main>
+    <main id="page-whatsapp" class="page" data-page="whatsapp" hidden>
+      <div class="page-header"><div><h1 class="page-title">WhatsApp Messages</h1><p class="page-subtitle">Prepare and share reminders.</p></div></div>
+      <div class="coming-soon-card"><div class="cs-icon">💬</div><h2>WhatsApp Message Flow</h2><p>Template messages, performer selection, and WhatsApp share links. Milestone 3.</p><p class="cs-milestone">Milestone 3 — Team Operations</p></div>
+    </main>
+    <main id="page-print" class="page" data-page="print" hidden>
+      <div class="page-header"><div><h1 class="page-title">Print Sheets</h1><p class="page-subtitle">Generate event-day and host sheets.</p></div></div>
+      <div class="coming-soon-card"><div class="cs-icon">🖨️</div><h2>Print &amp; Export</h2><p>Host sheet, backstage, sound operator, and performer list — A4 ready. Milestone 4.</p><p class="cs-milestone">Milestone 4 — Event Day</p></div>
+    </main>
+    <main id="page-payments" class="page" data-page="payments" hidden>
+      <div class="page-header"><div><h1 class="page-title">Payments &amp; Reports</h1><p class="page-subtitle">Track packages, advances, and balances.</p></div></div>
+      <div class="coming-soon-card"><div class="cs-icon">💰</div><h2>Payments &amp; Business Tracker</h2><p>Package amounts, expenses, and profitability reports. Milestone 5.</p><p class="cs-milestone">Milestone 5 — Audio &amp; Business</p></div>
+    </main>
+    <main id="page-team" class="page" data-page="team" hidden>
+      <div class="page-header"><div><h1 class="page-title">Team &amp; Users</h1><p class="page-subtitle">Admin user management and permissions.</p></div></div>
+      <div class="coming-soon-card"><div class="cs-icon">🔑</div><h2>Team Management</h2><p>Admin-managed user creation, passwords, deactivation, and audit log. Milestone 1 auth then full UI Milestone 2.</p><p class="cs-milestone">Milestone 1 — Foundation</p></div>
+    </main>
+    <main id="page-settings" class="page" data-page="settings" hidden>
+      <div class="page-header"><div><h1 class="page-title">Settings</h1><p class="page-subtitle">App configuration, themes, and integration setup.</p></div></div>
+      <div class="settings-sections">
+        <section class="settings-section" aria-labelledby="s-theme">
+          <h2 id="s-theme" class="settings-section-title">Theme</h2>
+          <p class="settings-desc">Choose your workspace theme. Saved per device.</p>
+          <div class="theme-settings-grid" role="radiogroup" aria-label="App theme">
+            <button class="theme-option-btn active" data-theme="dark-studio" id="so-dark-studio"><div class="to-swatch dark-studio-swatch"></div><span>Dark Studio</span></button>
+            <button class="theme-option-btn" data-theme="light-studio" id="so-light-studio"><div class="to-swatch light-studio-swatch"></div><span>Light Studio</span></button>
+            <button class="theme-option-btn" data-theme="black-gold" id="so-black-gold"><div class="to-swatch black-gold-swatch"></div><span>Black &amp; Gold</span></button>
+            <button class="theme-option-btn" data-theme="wedding" id="so-wedding"><div class="to-swatch wedding-swatch"></div><span>Wedding</span></button>
+          </div>
+        </section>
+        <section class="settings-section" aria-labelledby="s-integrations">
+          <h2 id="s-integrations" class="settings-section-title">Integrations</h2>
+          <div class="integration-item"><div class="integration-info"><span class="integration-name">Google Sheets</span><span class="integration-status not-connected">Not Connected</span></div><p class="integration-desc">Required for data persistence. Configure Apps Script endpoint.</p><button class="btn-secondary btn-sm">Configure</button></div>
+          <div class="integration-item"><div class="integration-info"><span class="integration-name">Google Drive</span><span class="integration-status not-connected">Not Connected</span></div><p class="integration-desc">Required for audio file and gallery media storage.</p><button class="btn-secondary btn-sm">Configure</button></div>
+          <div class="integration-item"><div class="integration-info"><span class="integration-name">Instagram (@_burritu_)</span><span class="integration-status partial">View Only</span></div><p class="integration-desc">Profile linked in sidebar. Live feed requires Instagram Basic Display API.</p><a href="https://www.instagram.com/_burritu_/" target="_blank" rel="noopener noreferrer" class="btn-secondary btn-sm">Open Profile</a></div>
+        </section>
+        <section class="settings-section" aria-labelledby="s-app">
+          <h2 id="s-app" class="settings-section-title">App Info</h2>
+          <div class="settings-info-grid">
+            <div class="settings-info-item"><span class="settings-info-label">App</span><span class="settings-info-val">Velvet Stage v1.0.0</span></div>
+            <div class="settings-info-item"><span class="settings-info-label">Milestone</span><span class="settings-info-val">1 — Foundation Preview</span></div>
+            <div class="settings-info-item"><span class="settings-info-label">Song Library</span><span class="settings-info-val">300 candidates (all Pending review)</span></div>
+            <div class="settings-info-item"><span class="settings-info-label">Data Mode</span><span class="settings-info-val">Local Demo — Sheets not connected</span></div>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- Song Detail Modal -->
+<div id="song-modal" class="modal-overlay" hidden style="display: none;" aria-modal="true" role="dialog" aria-labelledby="song-modal-title">
+  <div class="modal-panel">
+    <div class="modal-header">
+      <h2 id="song-modal-title" class="modal-title">Song Details</h2>
+      <button class="modal-close-btn" id="song-modal-close" aria-label="Close">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div id="song-modal-body" class="modal-body"></div>
+  </div>
+</div>
+
+<!-- Toast notification -->
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+<!-- Mobile Bottom Nav -->
+<nav class="mobile-bottom-nav" aria-label="Mobile navigation">
+  <button class="mobile-nav-item active" data-page="dashboard" aria-label="Dashboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg><span>Home</span></button>
+  <button class="mobile-nav-item" data-page="songs" aria-label="Songs"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg><span>Songs</span></button>
+  <button class="mobile-nav-item" data-page="events" aria-label="Events"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg><span>Events</span></button>
+  <button class="mobile-nav-item" data-page="performers" aria-label="Performers"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span>Performers</span></button>
+  <button class="mobile-nav-item" id="mobile-menu-btn" aria-label="More options"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg><span>More</span></button>
+</nav>
+
+<script src="config.js"></script>
+<script src="songs.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
